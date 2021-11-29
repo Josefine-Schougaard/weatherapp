@@ -33,15 +33,14 @@ const updateUI = (data) =>{
     }
     time.setAttribute('src',timeSrc);
 
-    //remove d-none
-    if(card.classList.contains('d-none')){
-        card.classList.remove('d-none');
-    }
 };
 
 const updateCity = async (city) =>{
     const cityDets = await getCity(city);
     const weather = await getWeather(cityDets.Key);
+
+    //local storage
+    localStorage.setItem('lastsearch',city);
 
     return {
         cityDets: cityDets,
@@ -62,3 +61,13 @@ cityForm.addEventListener('submit', e =>{
         .catch(err => console.log(err));
 
 });
+
+const lastSearch = () =>{
+    const prevSession = localStorage.getItem('lastsearch');
+    console.log(prevSession)
+    updateCity(prevSession)
+    .then(data => updateUI(data))
+    .catch(err => console.log(err));
+};
+
+lastSearch();
